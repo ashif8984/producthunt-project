@@ -24,13 +24,17 @@ def signup(request):
         return render(request, 'accounts/signup.html')
 
 def login(request):
+    context = {} 
+    form = AccountForm(request.POST or None) 
+    context['form'] = form
     if request.method == 'POST':
         user = auth.authenticate(username=request.POST['username'],password=request.POST['password'])
-        if user is not None:
+        if user is not None and form.is_valid():
             auth.login(request, user)
             return redirect('home')
         else:
-            return render(request, 'accounts/login.html', {'error':'Username or Passoword is incorrect'})
+            #return render(request, 'accounts/login.html', {'error':'Username or Passoword is incorrect'})
+            return render(request, "accounts/login.html", context) 
 
     else:
 
